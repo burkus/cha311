@@ -12,7 +12,7 @@ export interface PublicParkWorkRequest extends Record<string, unknown> {
   client_id: number; // 1000051
   custom_field_16975: string; // phone number
   has_image: 0 | 1;
-  image: string; // binary data?
+  uploadedfile: unknown; // binary
 }
 
 export type PublicParkWorkRequestInputs = Pick<
@@ -38,6 +38,6 @@ export const createPublicParkWorkRequest = (
     client_id: 1000051,
     custom_field_16975: request.phoneNumber,
     has_image,
-    image: request.image,
+    uploadedfile: request.image,
   };
 };
