@@ -1,11 +1,9 @@
-import { PublicParkWorkRequestInputs, createPublicParkWorkRequest, PublicParkWorkRequest } from "../types/requests"
+import { PublicParkWorkRequestInputs, createPublicParkWorkRequest } from "../types/requests"
 import { Cha311URL } from "./const"
 
-const formify = (data: PublicParkWorkRequest) => {
+const formify = (data: Record<string, unknown>) => {
     const formData = new FormData();
-    for (const key in data) {
-        formData.append(key, data[key]);
-    }
+    Object.keys(data).forEach((key) => formData.append(key, data[key] as string))
     return formData;
 }
 

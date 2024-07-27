@@ -1,4 +1,4 @@
-export interface PublicParkWorkRequest {
+export interface PublicParkWorkRequest extends Record<string, unknown> {
   title: "Public Park Work Request";
   description: string;
   request_type_id: 1004930;
