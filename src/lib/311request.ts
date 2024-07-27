@@ -7,10 +7,9 @@ const formify = (data: Record<string, unknown>) => {
     return formData;
 }
 
-export const createParks311Request = async (req: PublicParkWorkRequestInputs) => {
-    const fullRequest = createPublicParkWorkRequest(req)
+export const createParks311Request = async (form: FormData) => {
     return await fetch(Cha311URL, {
         method: 'POST',
-        body: formify(fullRequest)
+        body: form
     })
 }

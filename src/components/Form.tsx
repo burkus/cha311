@@ -12,7 +12,6 @@ import { useAtom } from "jotai";
 
 import store from "../store";
 import { createParks311Request } from "../lib/311request";
-import { PublicParkWorkRequestInputs } from "../types/requests";
 import { PublicWorkResponse } from "../types/responses";
 
 import Loading from "./Loading";
@@ -21,25 +20,21 @@ const Form: FC = () => {
   const [isLoading, setIsLoading] = useBoolean(false);
   const [location] = useAtom(store.location);
   const toast = useToast();
-  const { handleSubmit, control } = useForm<PublicParkWorkRequestInputs>({
-    defaultValues: {
-      description: "",
-      phoneNumber: "",
-      latitude: location.lat,
-      longitude: location.lng,
-      address: "",
-    },
-  });
+  const { handleSubmit, control } = useForm();
 
-  const onSubmit = (data: PublicParkWorkRequestInputs) => {
+  const onSubmit = (data: Record<string, unknown>) => {
+    const formData = new FormData();
+    Object.keys(data).forEach((key) =>
+      formData.append(key, data[key] as string)
+    );
     setIsLoading.on();
-    createParks311Request(data)
+    createParks311Request(formData)
       .then((res) => res.json())
       .then((data: PublicWorkResponse) => {
         if (data.response.status.code === 200) {
           toast({
             title: "Great Success!",
-            description: "Your request has been submitted",
+            description: `Your request # is ${data.response.request_id}`,
             duration: 5000,
             isClosable: true,
             status: "success",
@@ -54,7 +49,7 @@ const Form: FC = () => {
   };
 
   return (
-    <Container position='relative'>
+    <Container position="relative">
       {isLoading && <Loading />}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack padding={3}>
@@ -83,7 +78,13 @@ const Form: FC = () => {
             name="latitude"
             control={control}
             render={({ field }) => (
-              <Input {...field} placeholder="Latitude" type="number" disabled />
+              <Input
+                {...field}
+                value={location.lat}
+                placeholder="Latitude"
+                type="number"
+                disabled
+              />
             )}
           />
           <Controller
@@ -92,13 +93,28 @@ const Form: FC = () => {
             render={({ field }) => (
               <Input
                 {...field}
+                value={location.lng}
                 placeholder="Longitude"
                 type="number"
                 disabled
               />
             )}
           />
-          <Input type='file' accept='image/*' capture='environment' />
+          <Controller
+            name="image"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                value={field.value?.fileName}
+                onChange={(e) => field.onChange(e.target.files?.[0])}
+                pt={1}
+              />
+            )}
+          />
           <Input type="submit" />
         </Stack>
       </form>
