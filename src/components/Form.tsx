@@ -98,6 +98,7 @@ const Form: FC = () => {
               />
             )}
           />
+          <Input type='file' accept='image/*' capture='environment' />
           <Input type="submit" />
         </Stack>
       </form>
