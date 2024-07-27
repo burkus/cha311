@@ -24,11 +24,9 @@ const Form: FC = () => {
 
   const onSubmit = (data: Record<string, unknown>) => {
     const formData = new FormData();
-    Object.keys(data).forEach((key) =>
-      formData.append(key, data[key] as string)
-    );
+    formData.append('image', data.image as Blob)
     setIsLoading.on();
-    createParks311Request(formData)
+    createParks311Request(formData, data)
       .then((res) => res.json())
       .then((data: PublicWorkResponse) => {
         if (data.response.status.code === 200) {
