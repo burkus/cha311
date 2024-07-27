@@ -17,7 +17,7 @@ import { PublicWorkResponse } from "../types/responses";
 import Loading from "./Loading";
 
 const Form: FC = () => {
-  const [isLoading, setIsLoading] = useBoolean(true);
+  const [isLoading, setIsLoading] = useBoolean(false);
   const [location] = useAtom(store.location);
   const [,setRequests] = useAtom(store.requests)
   const toast = useToast();
