@@ -17,9 +17,9 @@ import { PublicWorkResponse } from "../types/responses";
 import Loading from "./Loading";
 
 const Form: FC = () => {
-  const [isLoading, setIsLoading] = useBoolean(false);
+  const [isLoading, setIsLoading] = useBoolean(true);
   const [location] = useAtom(store.location);
-  const [,setRequests] = useAtom(store.requests)
+  const [, setRequests] = useAtom(store.requests);
   const toast = useToast();
   const { handleSubmit, control } = useForm();
 
@@ -49,8 +49,7 @@ const Form: FC = () => {
   };
 
   return (
-    <Container position="relative">
-      {isLoading && <Loading />}
+    <Container>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack padding={3}>
           <Controller
@@ -119,6 +118,7 @@ const Form: FC = () => {
           <Input type="submit" disabled={isLoading} />
         </Stack>
       </form>
+      {isLoading && <Loading />}
     </Container>
   );
 };
