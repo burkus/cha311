@@ -19,6 +19,7 @@ import Loading from "./Loading";
 const Form: FC = () => {
   const [isLoading, setIsLoading] = useBoolean(false);
   const [location] = useAtom(store.location);
+  const [, setRequests] = useAtom(store.requests)
   const toast = useToast();
   const { handleSubmit, control } = useForm();
 
@@ -34,10 +35,11 @@ const Form: FC = () => {
           toast({
             title: "Great Success!",
             description: `Your request # is ${data.response.request_id}`,
-            duration: 5000,
             isClosable: true,
+            duration: 1000000,
             status: "success",
           });
+          setRequests((prev) => [...prev, data.response.request_id]);
         }
         setIsLoading.off();
       })

@@ -5,6 +5,9 @@ const location = atom({
     lng: 85.3094
 })
 
+const requests = atom<Array<number>>([])
+
 export default {
-    location
+    location,
+    requests
 }
