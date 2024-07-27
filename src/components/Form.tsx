@@ -24,7 +24,8 @@ const Form: FC = () => {
 
   const onSubmit = (data: Record<string, unknown>) => {
     const formData = new FormData();
-    formData.append('image', data.image as Blob)
+    data.latitude = location.lat;
+    data.longitude = location.lng;
     setIsLoading.on();
     createParks311Request(formData, data)
       .then((res) => res.json())

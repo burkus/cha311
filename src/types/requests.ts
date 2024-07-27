@@ -22,15 +22,22 @@ export type PublicParkWorkRequestInputs = Pick<
 
 export const createPublicParkWorkRequest = (
   request: PublicParkWorkRequestInputs
-): PublicParkWorkRequest => ({
-    ...request,
-  title: "Public Park Work Request",
-  request_type_id: 1004930,
-  user_address: request.address,
-  long_address: request.address,
-  zipcode: undefined,
-  space_id: null,
-  client_id: 1000051,
-  custom_field_16975: request.phoneNumber,
-  has_image: request.image ? 1 : 0,
-});
+): PublicParkWorkRequest => {
+  const has_image = request.image ? 1 : 0
+  return {
+    address: request.address,
+    latitude: request.latitude,
+    longitude: request.longitude,
+    description: request.description,
+    title: "Public Park Work Request",
+    request_type_id: 1004930,
+    user_address: request.address,
+    long_address: request.address,
+    zipcode: undefined,
+    space_id: null,
+    client_id: 1000051,
+    custom_field_16975: request.phoneNumber,
+    has_image,
+    image: request.image,
+  };
+};
