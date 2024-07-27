@@ -17,18 +17,17 @@ import { PublicWorkResponse } from "../types/responses";
 import Loading from "./Loading";
 
 const Form: FC = () => {
-  const [isLoading, setIsLoading] = useBoolean(false);
+  const [isLoading, setIsLoading] = useBoolean(true);
   const [location] = useAtom(store.location);
-  const [, setRequests] = useAtom(store.requests)
+  const [,setRequests] = useAtom(store.requests)
   const toast = useToast();
   const { handleSubmit, control } = useForm();
 
   const onSubmit = (data: Record<string, unknown>) => {
-    const formData = new FormData();
     data.latitude = location.lat;
     data.longitude = location.lng;
     setIsLoading.on();
-    createParks311Request(formData, data)
+    createParks311Request(data)
       .then((res) => res.json())
       .then((data: PublicWorkResponse) => {
         if (data.response.status.code === 200) {
@@ -113,10 +112,11 @@ const Form: FC = () => {
                 value={field.value?.fileName}
                 onChange={(e) => field.onChange(e.target.files?.[0])}
                 pt={1}
+                disabled={isLoading}
               />
             )}
           />
-          <Input type="submit" />
+          <Input type="submit" disabled={isLoading} />
         </Stack>
       </form>
     </Container>

@@ -1,9 +1,10 @@
 import { PublicParkWorkRequestInputs, createPublicParkWorkRequest } from "../types/requests"
 import { Cha311URL } from "./const"
 
-export const createParks311Request = async (form: FormData, data: Record<string, unknown>) => {
+export const createParks311Request = async (data: Record<string, unknown>) => {
+    const form = new FormData()
     const fullRequest = createPublicParkWorkRequest(data as PublicParkWorkRequestInputs);
-    console.log(fullRequest);
+    
     Object.keys(fullRequest).forEach((key) =>
         form.append(key, fullRequest[key] as string)
     )
