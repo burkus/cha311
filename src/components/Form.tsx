@@ -6,13 +6,17 @@ import {
   Container,
   useToast,
   useBoolean,
+  InputGroup,
+  Button,
+  InputRightAddon,
 } from "@chakra-ui/react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, ControllerRenderProps, FieldValues } from "react-hook-form";
 import { useAtom } from "jotai";
 
 import store from "../store";
 import { createParks311Request } from "../lib/311request";
 import { PublicWorkResponse } from "../types/responses";
+import { requestReverseGeocode } from "../lib/geocoding";
 
 import Loading from "./Loading";
 
@@ -22,6 +26,23 @@ const Form: FC = () => {
   const [, setRequests] = useAtom(store.requests);
   const toast = useToast();
   const { handleSubmit, control } = useForm();
+
+  const handleAutofill = (field: ControllerRenderProps<FieldValues, 'address'>) => () => { 
+    const request = () => requestReverseGeocode(location.lat, location.lng)
+      .then((data) => {
+        field.onChange(data.display_name);
+      })
+      .catch(() => {
+        toast({
+            title: "Failed to fetch address",
+            description: 'Address could not be fetched',
+            isClosable: true,
+            status: 'warning'
+        })
+      });
+
+      setTimeout(request, 1000)
+  }
 
   const onSubmit = (data: Record<string, unknown>) => {
     data.latitude = location.lat;
@@ -70,7 +91,12 @@ const Form: FC = () => {
             name="address"
             control={control}
             render={({ field }) => (
-              <Input {...field} placeholder="Address" type="text" />
+              <InputGroup>
+                <Input {...field} placeholder="Address" type="text" />
+                <InputRightAddon>
+                  <Button onClick={handleAutofill(field)}>autofill</Button>
+                </InputRightAddon>
+              </InputGroup>
             )}
           />
           <Controller
